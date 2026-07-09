@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>挽回十二星座挑战测试</title>
+<style>
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:#171311;color:#f4e8cf;display:flex;justify-content:center;min-height:100vh}
+.card{width:min(92vw,520px);margin:20px;background:#221b18;border:1px solid #8d7450;border-radius:24px;padding:24px;box-shadow:0 10px 30px rgba(0,0,0,.35);animation:fade .35s}
+button{width:100%;padding:14px;border:none;border-radius:14px;margin:8px 0;background:#b9975b;color:#1a140f;font-weight:700}
+.opt{background:#2d2521;color:#f4e8cf;border:1px solid #5f4d39}
+.small{opacity:.8;font-size:14px}
+@keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+</style>
+</head>
+<body><div id="app"></div>
+<script>
+const levels=Array.from({length:15},(_,i)=>({
+title:`第${i+1}关`,
+scene:`场景${i+1}：面对${["白羊","金牛","双子","巨蟹","狮子","处女","天秤","天蝎","射手","摩羯","水瓶","双鱼","白羊","天秤","最终"] [i]}前任，你决定如何行动？`,
+line:"INFJ：真正的靠近，不是控制，而是理解。",
+opts:[
+"立即解释所有误会",
+"尊重对方节奏，真诚沟通",
+"不断发消息挽留",
+"让共同好友施压"
+],
+ok:1,
+death:{
+txt:"关系在焦虑中进一步疏远。",
+rate:(65-i*2)+"%",
+tips:[
+"真正的爱需要边界。",
+"越急越容易失去信任。",
+"改变自己，比改变别人更重要。"
+]
+}
+}));
+const endText=`恭喜你完成15关。\n\n你最终明白：真正的挽回，不是赢回某个人，而是成长为更成熟、更稳定、更有力量的人。\n\n无论故事是否继续，你都值得被认真爱，也值得拥有更好的未来。`;
+
+let idx=-1;
+const app=document.getElementById("app");
+function home(){
+app.innerHTML=`<div class=card>
+<h1>挽回十二星座挑战</h1>
+<p>15关剧情测试 · 深色极简治愈风</p>
+<p class=small>挑战关卡：15<br>成功率：3.8%</p>
+<button onclick="next()">开始挑战</button>
+</div>`;
+}
+function next(){idx++; if(idx>=levels.length){win();return;} render();}
+function render(){
+const l=levels[idx];
+app.innerHTML=`<div class=card>
+<h2>${l.title}</h2>
+<p>${l.scene}</p>
+<p style="color:#d9bc7b">“${l.line}”</p>
+${l.opts.map((o,n)=>`<button class="opt" onclick="choose(${n})">${String.fromCharCode(65+n)}. ${o}</button>`).join("")}
+</div>`;
+}
+function choose(n){
+const l=levels[idx];
+if(n===l.ok){next();return;}
+dead(l.death);
+}
+function dead(d){
+app.innerHTML=`<div class=card>
+<h2>💔 挑战失败</h2>
+<p>${d.txt}</p>
+<p>死亡率：<b>${d.rate}</b></p>
+<ol>
+${d.tips.map(x=>`<li>${x}</li>`).join("")}
+</ol>
+<button onclick="home();idx=-1">重新开始</button>
+<button onclick="render()">继续挑战</button>
+</div>`;
+}
+function win(){
+app.innerHTML=`<div class=card>
+<h1>🌟 终极通关</h1>
+<p style="white-space:pre-line">${endText}</p>
+<button onclick="home();idx=-1">重新体验</button>
+</div>`;
+alert("🎉 恭喜完成全部15关！");
+}
+home();
+</script></body></html>
